@@ -11,24 +11,17 @@
 - **生活反馈**：为原则记想法 / 语言 / 行动
 - **导出 / 导入 JSON**：本机备份与迁移
 
-数据默认存在浏览器 `localStorage`，不经过服务器。
+数据默认存在**你打开网站的那台浏览器**的 `localStorage` 里（不经过服务器）。换设备或清缓存会丢数据，请用页面上的「导出」备份。
 
-## 本地运行
+## 在线访问
 
-任意静态服务器即可，例如：
+**https://echoxisa.github.io/principles/**
 
-```bash
-cd principles
-python3 -m http.server 8765
-```
-
-浏览器打开：<http://localhost:8765>
-
-也可直接用浏览器打开 `index.html`（部分环境对 `localStorage` 更友好时用本地服务器）。
+由 GitHub Pages 托管。`main` 分支推送后会自动更新。
 
 ## 仓库
 
-便于维护与更新；应用本身无后端依赖。
+https://github.com/Echoxisa/principles
 
 ## License
 
