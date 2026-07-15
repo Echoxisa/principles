@@ -13,9 +13,7 @@
   <div class="app">
     <header class="header">
       <div class="header-text">
-        <p class="eyebrow">当前身份</p>
         <h1>原则</h1>
-        <p class="subtitle">想法 · 语言 · 行动 —— 只留你仍选择的自己</p>
       </div>
       <div class="header-actions">
         <button type="button" class="btn ghost" id="btn-export" title="导出 JSON">导出</button>
@@ -37,11 +35,6 @@
       <section id="panel-archived" class="panel" hidden></section>
     </main>
 
-    <footer class="footer">
-      <span>数据保存在本机浏览器（localStorage）</span>
-      <span class="dot">·</span>
-      <span>请定期导出备份</span>
-    </footer>
   </div>
 
   <!-- 新建 / 编辑 -->
@@ -50,11 +43,11 @@
       <h2 id="form-title">新原则</h2>
       <label class="field">
         <span>名称</span>
-        <input type="text" id="field-title" required maxlength="80" placeholder="一句话可指认" />
+        <input type="text" id="field-title" required maxlength="80" />
       </label>
       <label class="field">
         <span>说明</span>
-        <textarea id="field-body" rows="4" maxlength="2000" placeholder="我选择经验什么？想法 / 语言 / 行动如何体现？"></textarea>
+        <textarea id="field-body" rows="4" maxlength="2000"></textarea>
       </label>
       <div class="dialog-actions">
         <button type="button" class="btn ghost" id="form-cancel">取消</button>
@@ -67,10 +60,9 @@
   <dialog id="dialog-archive" class="dialog">
     <form method="dialog" id="form-archive">
       <h2>不再选择</h2>
-      <p class="dialog-hint">不选择也是一种选择。可留下为何不再选（可选）。</p>
       <label class="field">
         <span>原因（可选）</span>
-        <textarea id="field-archive-reason" rows="3" maxlength="500" placeholder="不符合灵魂感受 / 试过无效 / 被新原则取代…"></textarea>
+        <textarea id="field-archive-reason" rows="3" maxlength="500" placeholder="可选"></textarea>
       </label>
       <div class="dialog-actions">
         <button type="button" class="btn ghost" id="archive-cancel">取消</button>
@@ -82,7 +74,7 @@
   <!-- 反馈 -->
   <dialog id="dialog-feedback" class="dialog">
     <form method="dialog" id="form-feedback">
-      <h2>生活反馈</h2>
+      <h2>反馈</h2>
       <p class="dialog-hint" id="feedback-principle-name"></p>
       <fieldset class="kinds">
         <legend>类型</legend>
@@ -91,8 +83,8 @@
         <label><input type="radio" name="kind" value="action" /> 行动</label>
       </fieldset>
       <label class="field">
-        <span>发生了什么</span>
-        <textarea id="field-feedback" rows="3" required maxlength="800" placeholder="一句真实记录即可"></textarea>
+        <span>内容</span>
+        <textarea id="field-feedback" rows="3" required maxlength="800"></textarea>
       </label>
       <div class="dialog-actions">
         <button type="button" class="btn ghost" id="feedback-cancel">取消</button>

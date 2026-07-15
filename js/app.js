@@ -87,17 +87,11 @@ function render() {
 
   panelActive.innerHTML = active.length
     ? active.map((p) => cardHtml(p, false)).join("")
-    : emptyHtml(
-        "还没有生效中的原则",
-        "写下你此刻仍选择经验的身份。少而真。"
-      );
+    : emptyHtml("暂无原则");
 
   panelArchived.innerHTML = archived.length
     ? archived.map((p) => cardHtml(p, true)).join("")
-    : emptyHtml(
-        "暂无归档",
-        "不再选择的原则会留在这里——不选择也是一种选择。"
-      );
+    : emptyHtml("暂无");
 
   panelActive.hidden = tab !== "active";
   panelArchived.hidden = tab !== "archived";
@@ -106,8 +100,8 @@ function render() {
   });
 }
 
-function emptyHtml(title, hint) {
-  return `<div class="empty"><p>${esc(title)}</p><p class="hint">${esc(hint)}</p></div>`;
+function emptyHtml(title) {
+  return `<div class="empty"><p>${esc(title)}</p></div>`;
 }
 
 function cardHtml(p, isArchived) {
