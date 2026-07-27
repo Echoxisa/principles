@@ -1,9 +1,7 @@
 /**
  * 原则 · 身份
- * 本地 localStorage；生效 / 归档；想法·语言·行动反馈
+ * 后端 data.json；生效 / 归档；想法·语言·行动反馈
  */
-
-const STORAGE_KEY = "principles-identity-v1";
 
 const KIND_LABEL = {
   thought: "想法",
@@ -17,7 +15,12 @@ const KIND_LABEL = {
 // —— State ——
 
 /** @type {{ principles: Principle[] }} */
-let state = load();
+let state = { principles: [] };
+
+(async () => {
+  state = await load();
+  render();
+})();
 
 let tab = "active";
 /** @type {string|null} */
@@ -40,11 +43,11 @@ const formFeedback = document.getElementById("form-feedback");
 
 // —— Storage ——
 
-function load() {
+async function load() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return { principles: [] };
-    const data = JSON.parse(raw);
+    const res = await fetch('/api/data');
+    if (!res.ok) return { principles: [] };
+    const data = await res.json();
     if (!data || !Array.isArray(data.principles)) return { principles: [] };
     return data;
   } catch {
@@ -52,8 +55,12 @@ function load() {
   }
 }
 
-function save() {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+async function save() {
+  await fetch('/api/data', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(state)
+  });
 }
 
 function uid() {
@@ -203,7 +210,7 @@ function openFeedback(id) {
   document.getElementById("field-feedback").focus();
 }
 
-function savePrinciple(e) {
+async function savePrinciple(e) {
   e.preventDefault();
   const title = document.getElementById("field-title").value.trim();
   const body = document.getElementById("field-body").value.trim();
@@ -227,13 +234,13 @@ function savePrinciple(e) {
       feedback: [],
     });
   }
-  save();
+  await save();
   dialogForm.close();
   tab = "active";
   render();
 }
 
-function confirmArchive(e) {
+async function confirmArchive(e) {
   e.preventDefault();
   const p = state.principles.find((x) => x.id === archiveTargetId);
   if (!p) return;
@@ -241,32 +248,32 @@ function confirmArchive(e) {
   p.archivedAt = now();
   p.archiveReason = document.getElementById("field-archive-reason").value.trim();
   p.updatedAt = now();
-  save();
+  await save();
   dialogArchive.close();
   archiveTargetId = null;
   render();
 }
 
-function restore(id) {
+async function restore(id) {
   const p = state.principles.find((x) => x.id === id);
   if (!p) return;
   p.status = "active";
   p.archivedAt = undefined;
   p.archiveReason = undefined;
   p.updatedAt = now();
-  save();
+  await save();
   tab = "active";
   render();
 }
 
-function hardDelete(id) {
-  if (!confirm("永久删除这条原则？此操作不可恢复（本机数据）。")) return;
+async function hardDelete(id) {
+  if (!confirm("永久删除这条原则？此操作不可恢复。")) return;
   state.principles = state.principles.filter((x) => x.id !== id);
-  save();
+  await save();
   render();
 }
 
-function saveFeedback(e) {
+async function saveFeedback(e) {
   e.preventDefault();
   const p = state.principles.find((x) => x.id === feedbackTargetId);
   if (!p) return;
@@ -277,7 +284,7 @@ function saveFeedback(e) {
   if (!p.feedback) p.feedback = [];
   p.feedback.push({ id: uid(), kind, text, at: now() });
   p.updatedAt = now();
-  save();
+  await save();
   dialogFeedback.close();
   feedbackTargetId = null;
   render();
@@ -294,9 +301,9 @@ function exportJson() {
   URL.revokeObjectURL(a.href);
 }
 
-function importJson(file) {
+async function importJson(file) {
   const reader = new FileReader();
-  reader.onload = () => {
+  reader.onload = async () => {
     try {
       const data = JSON.parse(reader.result);
       if (!data || !Array.isArray(data.principles)) {
@@ -305,12 +312,12 @@ function importJson(file) {
       }
       if (
         state.principles.length &&
-        !confirm("导入将覆盖本机现有数据，确定？")
+        !confirm("导入将覆盖现有数据，确定？")
       ) {
         return;
       }
       state = { principles: data.principles };
-      save();
+      await save();
       render();
     } catch {
       alert("无法解析 JSON");
@@ -355,5 +362,3 @@ document.querySelector("main").addEventListener("click", (e) => {
   else if (act === "restore") restore(id);
   else if (act === "delete") hardDelete(id);
 });
-
-render();

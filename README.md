@@ -32,10 +32,10 @@
 
 ## 数据存在哪
 
-- 浏览器 **`localStorage`**，键名：`principles-identity-v1`  
-- **无服务器账号、无云同步**  
-- 换设备 / 换浏览器 / 清缓存会丢数据 → 用页面「导出」备份  
-- 导入会**覆盖**本机现有数据（有确认）  
+- 后端 **`data.json`**，通过 `server.py` 提供 API  
+- 数据跟着代码走，推 `main` 后 GitHub 仓库里也有  
+- 本地运行 `python3 server.py`，端口 5533  
+- 导入会**覆盖**现有数据（有确认）  
 
 ### 数据形状（导出 JSON）
 
@@ -66,8 +66,10 @@
 
 ## 技术栈
 
-- 纯静态：`index.html` + `css/style.css` + `js/app.js`  
-- 无构建、无 npm、无后端  
+- 前端：`index.html` + `css/style.css` + `js/app.js`  
+- 后端：`server.py`（Python 标准库）  
+- 数据：`data.json`  
+- 无构建、无 npm、无框架  
 - 托管：GitHub Pages（`main` 分支根目录）  
 - `.nojekyll`：避免 Jekyll 处理导致部署失败  
 
@@ -80,22 +82,25 @@ principles/
 ├── index.html
 ├── css/style.css
 ├── js/app.js
+├── server.py          # 后端服务
+├── data.json          # 数据存储
 └── .nojekyll
 ```
 
 ## 维护与发布
 
-1. 改代码 → 本地用任意静态服务预览（**不要默认占用 8765**，可能与其它项目冲突）  
+1. 本地运行：  
    ```bash
    cd /Users/echo/Desktop/principles
-   python3 -m http.server 5533
+   python3 server.py
    # 打开 http://127.0.0.1:5533
    ```
-2. 提交并推送：  
+2. 改代码 → 刷新页面即可生效  
+3. 提交并推送（数据也一起走）：  
    ```bash
    git add -A && git commit -m "说明改了什么" && git push origin main
    ```
-3. 约 1 分钟后刷新 https://echoxisa.github.io/principles/  
+4. 约 1 分钟后刷新 https://echoxisa.github.io/principles/  
 
 GitHub 仓库设置：Pages → Deploy from branch → `main` / `/ (root)`。
 
