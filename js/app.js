@@ -336,6 +336,30 @@ document.getElementById("input-import").addEventListener("change", (e) => {
   e.target.value = "";
 });
 
+// 迁移localStorage数据
+document.getElementById("btn-migrate")?.addEventListener("click", async () => {
+  const raw = localStorage.getItem("principles-identity-v1");
+  if (!raw) {
+    alert("localStorage里没有数据");
+    return;
+  }
+  try {
+    const data = JSON.parse(raw);
+    if (!data || !Array.isArray(data.principles) || !data.principles.length) {
+      alert("localStorage里没有原则数据");
+      return;
+    }
+    if (!confirm(`找到 ${data.principles.length} 条原则，导入到后端？`)) return;
+    state = data;
+    await save();
+    localStorage.removeItem("principles-identity-v1");
+    render();
+    alert("迁移完成！");
+  } catch {
+    alert("解析localStorage数据失败");
+  }
+});
+
 document.getElementById("form-cancel").addEventListener("click", () => dialogForm.close());
 document.getElementById("archive-cancel").addEventListener("click", () => dialogArchive.close());
 document.getElementById("feedback-cancel").addEventListener("click", () => dialogFeedback.close());
