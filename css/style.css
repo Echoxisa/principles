@@ -243,6 +243,7 @@ button {
   margin: 0.65rem 0 0;
   color: var(--ink-muted);
   font-size: 0.92rem;
+  font-weight: 500;
   white-space: pre-wrap;
 }
 
